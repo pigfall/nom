@@ -210,4 +210,38 @@ func TestTakeWhile(t *testing.T){
 	}
 }
 
+func TestTakeWhile1(t *testing.T){
+	tests := []struct{
+		input string
+		want func(result *IResult,err error)
+		prediacte func(r rune)bool
+	}{
+		{
+			input:"tzz33",
+			prediacte:func(r rune)bool{
+				return unicode.IsLetter(r)
+			},
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t,"tzz",result.produced)
+				require.Equal(t,"33",result.notParsed)
+			},
+		},
+		{
+			input:"33",
+			prediacte:func(r rune)bool{
+				return unicode.IsLetter(r)
+			},
+			want:func(result *IResult,err error){
+				require.Equal(t,true,MustParseErr(err).IsNotMatch())
+			},
+		},
+	}
+
+	for _,test := range tests{
+		var  r,e = TakeWhile1(test.prediacte)(test.input)
+		test.want(&r,e)
+	}
+}
+
 

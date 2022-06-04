@@ -116,3 +116,27 @@ func TakeWhile(predicate func(r rune)bool)ParseFn{
 	}
 }
 
+func TakeWhile1(predicate func(r rune)bool)ParseFn{
+	return func(input string)(IResult,error){
+		if len(input) == 0{
+			return IResult{},parseErr("take whilte not match").notMatch().build()
+		}
+		for i,r := range []rune(input){
+			if !predicate(r){
+				if i == 0{
+					return IResult{},parseErr("take whilte not match").notMatch().build()
+				}
+				return IResult{
+					notParsed:input[i:],
+					produced: input[:i],
+				},nil
+			}
+		}
+
+		return IResult{
+			notParsed:"",
+			produced: input,
+		},nil
+	}
+}
+
