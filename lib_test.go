@@ -50,6 +50,14 @@ func TestAlpha0(t *testing.T){
 			},
 		},
 		{
+			input:"tzztzz",
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t,"tzztzz",result.produced)
+				require.Equal(t,"",result.notParsed)
+			},
+		},
+		{
 			input:"t2zz33",
 			want:func(result *IResult,err error){
 				require.Equal(t,nil,err)
@@ -106,6 +114,36 @@ func TestAlpha1(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = Alpha1()(test.input)
+		test.want(&r,e)
+	}
+}
+
+func TestAlphaNumeric0(t *testing.T){
+	tests := []struct{
+		tag string
+		input string
+		want func(result *IResult,err error)
+	}{
+		{
+			input:"tzz33",
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t,"tzz33",result.produced)
+				require.Equal(t,"",result.notParsed)
+			},
+		},
+		{
+			input:"tzz_33",
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t,"tzz",result.produced)
+				require.Equal(t,"_33",result.notParsed)
+			},
+		},
+	}
+
+	for _,test := range tests{
+		var  r,e = AlphaNumeric0()(test.input)
 		test.want(&r,e)
 	}
 }
