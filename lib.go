@@ -87,7 +87,7 @@ func AlphaNumeric0()ParseFn{
 
 func AlphaNumeric1()ParseFn{
 	return func(input string)(IResult,error){
-		i,err :=AlphaNumeric1()(input)
+		i,err :=AlphaNumeric0()(input)
 		if err != nil{
 			return IResult{},err
 		}
@@ -97,3 +97,22 @@ func AlphaNumeric1()ParseFn{
 		return i,nil
 	}
 }
+
+func TakeWhile(predicate func(r rune)bool)ParseFn{
+	return func(input string)(IResult,error){
+		for i,r := range []rune(input){
+			if !predicate(r){
+				return IResult{
+					notParsed:input[i:],
+					produced: input[:i],
+				},nil
+			}
+		}
+
+		return IResult{
+			notParsed:"",
+			produced: input,
+		},nil
+	}
+}
+
