@@ -10,12 +10,12 @@ func TestTag(t *testing.T){
 	tests := []struct{
 		tag string
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			tag:"tzz",
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"33",result.notParsed)
@@ -24,7 +24,7 @@ func TestTag(t *testing.T){
 		{
 			tag:" tzz",
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,MustParseErr(err).IsNotMatch(),true)
 			},
 		},
@@ -32,7 +32,7 @@ func TestTag(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = Tag(test.tag)(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
@@ -40,11 +40,11 @@ func TestAlpha0(t *testing.T){
 	tests := []struct{
 		tag string
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"33",result.notParsed)
@@ -52,7 +52,7 @@ func TestAlpha0(t *testing.T){
 		},
 		{
 			input:"tzztzz",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzztzz",result.produced)
 				require.Equal(t,"",result.notParsed)
@@ -60,7 +60,7 @@ func TestAlpha0(t *testing.T){
 		},
 		{
 			input:"t2zz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"2zz33",result.notParsed)
 				require.Equal(t,"t",result.produced)
@@ -68,7 +68,7 @@ func TestAlpha0(t *testing.T){
 		},
 		{
 			input:" t2zz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t," t2zz33",result.notParsed)
 				require.Equal(t,"",result.produced)
@@ -78,7 +78,7 @@ func TestAlpha0(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = Alpha0()(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
@@ -86,11 +86,11 @@ func TestAlpha1(t *testing.T){
 	tests := []struct{
 		tag string
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"33",result.notParsed)
@@ -98,7 +98,7 @@ func TestAlpha1(t *testing.T){
 		},
 		{
 			input:"t2zz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"2zz33",result.notParsed)
 				require.Equal(t,"t",result.produced)
@@ -106,7 +106,7 @@ func TestAlpha1(t *testing.T){
 		},
 		{
 			input:" t2zz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,true,MustParseErr(err).IsNotMatch())
 				require.Equal(t," t2zz33",result.notParsed)
 			},
@@ -115,7 +115,7 @@ func TestAlpha1(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = Alpha1()(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
@@ -123,11 +123,11 @@ func TestAlphaNumeric0(t *testing.T){
 	tests := []struct{
 		tag string
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz33",result.produced)
 				require.Equal(t,"",result.notParsed)
@@ -135,7 +135,7 @@ func TestAlphaNumeric0(t *testing.T){
 		},
 		{
 			input:"tzz_33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"_33",result.notParsed)
@@ -145,7 +145,7 @@ func TestAlphaNumeric0(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = AlphaNumeric0()(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
@@ -153,11 +153,11 @@ func TestAlphaNumeric1(t *testing.T){
 	tests := []struct{
 		tag string
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			input:"tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz33",result.produced)
 				require.Equal(t,"",result.notParsed)
@@ -165,7 +165,7 @@ func TestAlphaNumeric1(t *testing.T){
 		},
 		{
 			input:"tzz_33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"_33",result.notParsed)
@@ -173,7 +173,7 @@ func TestAlphaNumeric1(t *testing.T){
 		},
 		{
 			input:"_33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,true,MustParseErr(err).IsNotMatch())
 			},
 		},
@@ -181,14 +181,14 @@ func TestAlphaNumeric1(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = AlphaNumeric1()(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
 func TestTakeWhile(t *testing.T){
 	tests := []struct{
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 		prediacte func(r rune)bool
 	}{
 		{
@@ -196,7 +196,7 @@ func TestTakeWhile(t *testing.T){
 			prediacte:func(r rune)bool{
 				return unicode.IsLetter(r)
 			},
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"33",result.notParsed)
@@ -206,14 +206,14 @@ func TestTakeWhile(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = TakeWhile(test.prediacte)(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
 func TestTakeWhile1(t *testing.T){
 	tests := []struct{
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 		prediacte func(r rune)bool
 	}{
 		{
@@ -221,7 +221,7 @@ func TestTakeWhile1(t *testing.T){
 			prediacte:func(r rune)bool{
 				return unicode.IsLetter(r)
 			},
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"tzz",result.produced)
 				require.Equal(t,"33",result.notParsed)
@@ -232,7 +232,7 @@ func TestTakeWhile1(t *testing.T){
 			prediacte:func(r rune)bool{
 				return unicode.IsLetter(r)
 			},
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,true,MustParseErr(err).IsNotMatch())
 			},
 		},
@@ -240,18 +240,18 @@ func TestTakeWhile1(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = TakeWhile1(test.prediacte)(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 
 func TestSpace(t *testing.T){
 	tests := []struct{
 		input string
-		want func(result *IResult,err error)
+		want func(result *IResult[string],err error)
 	}{
 		{
 			input:" tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t," ",result.produced)
 				require.Equal(t,"tzz33",result.notParsed)
@@ -259,7 +259,7 @@ func TestSpace(t *testing.T){
 		},
 		{
 			input:"\r\t\n  tzz33",
-			want:func(result *IResult,err error){
+			want:func(result *IResult[string],err error){
 				require.Equal(t,nil,err)
 				require.Equal(t,"\r\t\n  ",result.produced)
 				require.Equal(t,"tzz33",result.notParsed)
@@ -269,7 +269,7 @@ func TestSpace(t *testing.T){
 
 	for _,test := range tests{
 		var  r,e = Space0()(test.input)
-		test.want(&r,e)
+		test.want(r,e)
 	}
 }
 

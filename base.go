@@ -1,10 +1,10 @@
 package nom
 
-type IResult struct {
+type IResult[P any] struct {
 	notParsed string
-	produced string
+	produced P
 }
 
-type ParseFn func(input string)(IResult,error)
+type ParseFn[P any] func(input string)(*IResult[P],error)
 
 
