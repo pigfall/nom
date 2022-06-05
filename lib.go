@@ -6,6 +6,7 @@ import(
 	"unicode"
 )
 
+// The input data will be compared to tag combinators's argument and will return the part of the input that matches the argument
 func Tag(tag string)ParseFn{
 	return func(input string)(IResult,error){
 		if strings.HasPrefix(input,tag){
@@ -15,10 +16,11 @@ func Tag(tag string)ParseFn{
 			},nil
 		}
 
-		return IResult{},parseErr(fmt.Sprintf("tag [%s]not match",tag)).notMatch().build()
+		return IResult{},parseErr(fmt.Sprintf("tag [%s] not match,input is %s",tag,input)).notMatch().build()
 	}
 }
 
+// Recognize zero or more lowcase and uppercase ASCII alphabetic characters
 func Alpha0()ParseFn{
 	return func(input string)(IResult,error){
 		if len(input) == 0{
@@ -45,6 +47,7 @@ func Alpha0()ParseFn{
 	}
 }
 
+// Recognize one or more lowercase and uppercase ASCII alphabetic characters
 func Alpha1()ParseFn{
 	return func(input string)(IResult,error){
 		i,err :=Alpha0()(input)
@@ -140,3 +143,12 @@ func TakeWhile1(predicate func(r rune)bool)ParseFn{
 	}
 }
 
+
+
+func Space0()ParseFn{
+	return func(input string)(IResult,error){
+		return  TakeWhile(func(r rune)bool{
+			return strings.ContainsAny(string(r),"\t\n \r")
+		})(input)
+	}
+}

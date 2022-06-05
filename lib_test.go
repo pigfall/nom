@@ -244,4 +244,33 @@ func TestTakeWhile1(t *testing.T){
 	}
 }
 
+func TestSpace(t *testing.T){
+	tests := []struct{
+		input string
+		want func(result *IResult,err error)
+	}{
+		{
+			input:" tzz33",
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t," ",result.produced)
+				require.Equal(t,"tzz33",result.notParsed)
+			},
+		},
+		{
+			input:"\r\t\n  tzz33",
+			want:func(result *IResult,err error){
+				require.Equal(t,nil,err)
+				require.Equal(t,"\r\t\n  ",result.produced)
+				require.Equal(t,"tzz33",result.notParsed)
+			},
+		},
+	}
+
+	for _,test := range tests{
+		var  r,e = Space0()(test.input)
+		test.want(&r,e)
+	}
+}
+
 
