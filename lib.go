@@ -4,11 +4,13 @@ import(
 	"fmt"
 	"strings"
 	"unicode"
+	"log"
 )
 
 // The input data will be compared to tag combinators's argument and will return the part of the input that matches the argument
 func Tag(tag string)ParseFn[string]{
 	return func(input string)(*IResult[string],error){
+		log.Println("tag input ",input)
 		if strings.HasPrefix(input,tag){
 			return &IResult[string]{
 				notParsed:input[len(tag):],

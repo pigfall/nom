@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	s := `{"t":"tzz"}`
+	s := `{"t":"tzz","tt":{}}`
 	fmt.Println(root(s))
 }
 
@@ -52,9 +52,9 @@ func keyValueParse(input string)(*nom.IResult[*keyValue],error){
 		nom.SeparatedPair(
 		nom.Preceded(nom.Space0(),str),
 		nom.Preceded(nom.Space0(),nom.Tag(":")),
-		nom.Preceded(nom.Space0(),str),
+		nom.Preceded(nom.Space0(),jsonValue),
 	),	
-	func(p nom.Pair[string,string])*keyValue{
+	func(p nom.Pair[string,json])*keyValue{
 		return &keyValue{
 			key:p.Left,
 			value:p.Right,
@@ -70,6 +70,24 @@ func str(input string)(*nom.IResult[string],error){
 			nom.Alpha1(),
 			nom.Tag("\""),
 		),
+	)(input)
+}
+
+func strJson(input string)(*nom.IResult[json],error){
+	return nom.Map(
+		str,
+	func(s string)json{
+		return s
+	},
+	)(input)
+}
+
+func jsonValue(input string)(*nom.IResult[json],error){
+	return nom.Alt(
+			[]nom.ParseFn[json]{
+				strJson,
+				hash,
+			},
 	)(input)
 }
 

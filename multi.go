@@ -1,9 +1,14 @@
 package nom
 
+import(
+	"log"
+)
+
 func SeparatedList0[O any,O2 any](separator ParseFn[O2],f ParseFn[O])ParseFn[[]O]{
 	return func(input string)(*IResult[[]O],error){
 		list := make([]O,0)
 		for {
+			log.Println(input)
 			res,err := f(input)
 			if err != nil {
 				return &IResult[[]O]{notParsed:input,produced:list},nil
