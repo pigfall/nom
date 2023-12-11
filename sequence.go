@@ -90,3 +90,13 @@ func SeparatedPair[O1,O2,O3 any](
 		},nil
 	}
 }
+
+func Between[T any,L any, R any](left ParseFn[L],middle ParseFn[T],right ParseFn[R])ParseFn[T]{
+  return Preceded(
+    left,
+    Terminated(
+      middle,
+      right,
+    ),
+  )
+}
